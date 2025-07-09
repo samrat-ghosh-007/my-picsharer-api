@@ -10,7 +10,8 @@ const swaggerOptions = {
       description: 'REST API for auth, posts, save/unsave, profile',
     },
     servers: [
-      { url: 'http://localhost:8080/api/v1' }   // dev server
+      { url: 'http://localhost:8080/api/v1' },
+      {url: 'https://my-picsharer-api.onrender.com/api/v1'}   // dev server
       // add your Render URL here after deployment
     ],
     components: {

@@ -88,8 +88,9 @@ const swaggerSpec = require('./swagger');
 
 // CORS config
 const corsOptions = {
-  origin: ['http://localhost:5173'],  // Allow Vite dev server
-  credentials: true                   // Allow cookies/auth headers
+  origin: '*',  // Allow Vite dev server
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']                   // Allow cookies/auth headers
 };
 
      // adjust path if you put it elsewhere

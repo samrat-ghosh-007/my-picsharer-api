@@ -104,10 +104,18 @@ function verifyToken(req, res, next) {
 /**
  * @swagger
  * tags:
- *   name: Auth
- *   description: Registration & login
+ *   - name: Auth
+ *     description: Registration & login
+ *   - name: Users
+ *     description: Profile & account management
+ *   - name: Posts
+ *     description: Create, read, delete, save & unsave posts
+ * servers:
+ *   - url: http://localhost:8080
+ *     description: Local development server
+ *   - url: https://my-picsharer-api.onrender.com
+ *     description: Production server
  */
-
 /**
  * @swagger
  * /auth/register:

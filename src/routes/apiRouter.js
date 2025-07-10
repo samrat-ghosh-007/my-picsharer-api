@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const upload = require('./multer');
+const cloudinary = require('./cloudinary');
 
 const userModel = require('./users');
 const postModel = require('./post');

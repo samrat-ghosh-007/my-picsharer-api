@@ -14,62 +14,6 @@ const router = express.Router();
 // Utility helpers
 //------------------------------------------------------------------
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       properties:
- *         _id:
- *           type: string
- *           example: 64b0007d1a2b3f0012345678
- *         username:
- *           type: string
- *           example: samrat
- *         name:
- *           type: string
- *           example: Samrat Ghosh
- *         email:
- *           type: string
- *           format: email
- *           example: samrat@example.com
- *         contact:
- *           type: number
- *           example: 9876543210
- *         avatarUrl:
- *           type: string
- *           example: https://res.cloudinary.com/demo/image/upload/v1621234567/avatar.jpg
- *         posts:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/Post'
- *         saved:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/Post'
-
- *     Post:
- *       type: object
- *       properties:
- *         _id:
- *           type: string
- *           example: 64b111aa2a2b9f0012123456
- *         user:
- *           $ref: '#/components/schemas/User'
- *         title:
- *           type: string
- *           example: My First Post
- *         description:
- *           type: string
- *           example: This is a great photo!
- *         image:
- *           type: string
- *           example: https://res.cloudinary.com/demo/image/upload/v1621234567/post.jpg
- *         publicId:
- *           type: string
- *           example: posts/sample12345
- */
 
 
 /** Sign + return a JWT that expires in 7 days */

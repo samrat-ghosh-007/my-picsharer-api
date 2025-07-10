@@ -17,12 +17,9 @@ const userSchema=mongoose.Schema({
     trim: true,
   },
   password: String,
-  profileImage: String,
   contact: Number,
-  boards: {
-    type: Array,
-    default: []
-  },
+  avatarUrl: String,
+  avatarPublicId: String,
   posts:[
     {
       type: mongoose.Schema.Types.ObjectId,

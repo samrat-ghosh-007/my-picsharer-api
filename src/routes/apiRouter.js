@@ -201,6 +201,15 @@ router.get('/users/me', verifyToken, async (req, res, next) => {
  */
 router.delete('/users/me', verifyToken, async (req, res, next) => {
   try {
+    // 1. 🔍 Get all the user's posts
+    const userPosts = await postModel.find({ user: req.user.id });
+
+    // 2. 🧹 Delete each post's image from Cloudinary
+    const deletePromises = userPosts
+      .filter(post => post.publicId)
+      .map(post => cloudinary.uploader.destroy(post.publicId));
+
+    await Promise.all(deletePromises);
     // Remove all user posts first
     await postModel.deleteMany({ user: req.user.id });
     await userModel.findByIdAndDelete(req.user.id);
@@ -313,8 +322,10 @@ router.get('/posts', verifyToken, async (req, res, next) => {
  */
 router.post('/posts', verifyToken, upload.single('image'), async (req, res, next) => {
   try {
+    const result = await cloudinary.uploader.upload(req.file.path);
     const post = await postModel.create({
       user: req.user.id,
+      publicId: result.public_id,
       title: req.body.title,
       description: req.body.description,
       image: req.file?.path,
@@ -390,6 +401,10 @@ router.delete('/posts/:id', verifyToken, async (req, res, next) => {
   try {
     const post = await postModel.findOneAndDelete({ _id: req.params.id, user: req.user.id });
     if (!post) return res.status(404).json({ message: 'Post not found or not yours' });
+
+    if (post.publicId) {
+      await cloudinary.uploader.destroy(post.publicId);
+    }
 
     // Remove from owner.posts and every user's saved array
     await userModel.updateOne({ _id: req.user.id }, { $pull: { posts: post._id, saved: post._id } });
@@ -467,6 +482,79 @@ router.delete('/posts/:id/unsave', verifyToken, async (req, res) => {
     res.status(200).json({ message: 'Post unsaved successfully' });
   } catch (err) {
     res.status(500).json({ message: 'Failed to unsave post', error: err.message });
+  }
+});
+//PUT /users/me/avatar – set an avatar
+/**
+ * @swagger
+ * /users/me/avatar:
+ *   put:
+ *     summary: Upload or update the user's display picture (DP)
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - avatar
+ *             properties:
+ *               avatar:
+ *                 type: string
+ *                 format: binary
+ *                 description: The image file to upload as profile picture
+ *     responses:
+ *       200:
+ *         description: Avatar updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Avatar updated
+ *                 avatarUrl:
+ *                   type: string
+ *                   format: uri
+ *                   example: https://res.cloudinary.com/demo/image/upload/v1621234567/avatar.jpg
+ *       400:
+ *         description: No image provided
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
+router.put('/users/me/avatar', verifyToken, upload.single('avatar'), async (req, res, next) => {
+  try {
+    const user = await userModel.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    if (!req.file) return res.status(400).json({ message: 'No image provided' });
+
+    // Delete old avatar from Cloudinary
+    if (user.avatarPublicId) {
+      await cloudinary.uploader.destroy(user.avatarPublicId);
+    }
+
+    // Upload new avatar to Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: 'avatars'
+    });
+
+    user.avatarUrl = result.secure_url;
+    user.avatarPublicId = result.public_id;
+    await user.save();
+
+    res.status(200).json({
+      message: 'Avatar updated',
+      avatarUrl: user.avatarUrl
+    });
+  } catch (err) {
+    next(err);
   }
 });
 

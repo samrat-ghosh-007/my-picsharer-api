@@ -221,6 +221,13 @@ router.delete('/users/me', verifyToken, async (req, res, next) => {
       .map(post => cloudinary.uploader.destroy(post.publicId));
 
     await Promise.all(deletePromises);
+
+    const user = await userModel.findById(req.user.id);
+
+    if (user?.avatarPublicId) {
+       const result = await cloudinary.uploader.destroy(user.avatarPublicId);
+    }   
+
     // Remove all user posts first
     await postModel.deleteMany({ user: req.user.id });
     await userModel.findByIdAndDelete(req.user.id);
@@ -333,7 +340,7 @@ router.get('/posts', verifyToken, async (req, res, next) => {
  */
 router.post('/posts', verifyToken, upload.single('image'), async (req, res, next) => {
   try {
-    const result = await cloudinary.uploader.upload(req.file.path);
+   
     const post = await postModel.create({
       user: req.user.id,
       publicId: result.public_id,
@@ -551,10 +558,10 @@ router.put('/users/me/avatar', verifyToken, upload.single('avatar'), async (req,
       await cloudinary.uploader.destroy(user.avatarPublicId);
     }
 
-    // Upload new avatar to Cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: 'avatars'
-    });
+    // // Upload new avatar to Cloudinary
+    // const result = await cloudinary.uploader.upload(req.file.path, {
+    //   folder: 'avatars'
+    // });
 
     user.avatarUrl = result.secure_url;
     user.avatarPublicId = result.public_id;

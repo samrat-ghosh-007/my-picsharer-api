@@ -73,7 +73,7 @@ function verifyToken(req, res, next) {
  *         application/json:
  *           schema:
  *             type: object
- *             required: [username, email, password]
+ *             required: [username, email, password, fullname]
  *             properties:
  *               username:  { type: string, example: samrat }
  *               email:     { type: string, format: email, example: samrat@example.com }

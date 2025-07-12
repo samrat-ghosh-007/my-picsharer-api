@@ -343,7 +343,7 @@ router.post('/posts', verifyToken, upload.single('image'), async (req, res, next
    
     const post = await postModel.create({
       user: req.user.id,
-      publicId: result.public_id,
+      publicId: req.file.filename,
       title: req.body.title,
       description: req.body.description,
       image: req.file?.path,
@@ -563,8 +563,8 @@ router.put('/users/me/avatar', verifyToken, upload.single('avatar'), async (req,
     //   folder: 'avatars'
     // });
 
-    user.avatarUrl = result.secure_url;
-    user.avatarPublicId = result.public_id;
+    user.avatarUrl = req.file.path;
+    user.avatarPublicId = req.file.filename;
     await user.save();
 
     res.status(200).json({

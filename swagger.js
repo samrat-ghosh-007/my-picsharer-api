@@ -55,7 +55,7 @@ const swaggerOptions = {
     },
     security: [{ bearerAuth: [] }],
   },
-  apis: ['./src/routes/*.js'], // adjust to your actual path
+  apis: ['./src/routes/*.js'], 
 };
 
 module.exports = swaggerJsdoc(swaggerOptions);

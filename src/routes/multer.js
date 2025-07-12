@@ -26,7 +26,7 @@ const multer = require('multer');
    cloudinary,
    params: async (req, file) => ({
     folder: 'pinterest-clone',                 // logical folder in Cloudinary
-     public_id: uuidv4(),                       // keep your UUID pattern
+     public_id: uuidv4(),                      
      format: path.extname(file.originalname).slice(1), // jpg | png | webp …
      transformation: [{ width: 1000, height: 1000, crop: 'limit' }],
    }),

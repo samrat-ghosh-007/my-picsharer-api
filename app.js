@@ -88,13 +88,12 @@ const swaggerSpec = require('./swagger');
 
 // CORS config
 const corsOptions = {
-  origin: '*',  // Allow Vite dev server
+  origin: '*',  
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']                   // Allow cookies/auth headers
 };
 
-     // adjust path if you put it elsewhere
-
+     
 
 
 app.use(cors(corsOptions));
@@ -107,7 +106,7 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(console.error);
 
-app.use('/api/v1', apiRouter); // Mount the REST routes
+app.use('/api/v1', apiRouter); 
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

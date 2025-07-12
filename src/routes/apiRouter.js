@@ -44,7 +44,7 @@ function verifyToken(req, res, next) {
 
 // POST /auth/register
 /* ------------------------------------------------------------------------- */
-/* 🔐  Auth                                                                  */
+/*  Auth                                                                  */
 /* ------------------------------------------------------------------------- */
 /**
  * @swagger
@@ -160,7 +160,7 @@ router.post('/auth/login', async (req, res, next) => {
 
 // GET /users/me  – view own profile (with posts + saved)
 /* ------------------------------------------------------------------------- */
-/* 👤  Users                                                                 */
+/*  Users                                                                 */
 /* ------------------------------------------------------------------------- */
 /**
  * @swagger
@@ -270,7 +270,7 @@ router.get('/users/:username', async (req, res, next) => {
 
 // GET /posts – global feed (populated)
 /* ------------------------------------------------------------------------- */
-/* 📝  Posts                                                                 */
+/*  Posts                                                                 */
 /* ------------------------------------------------------------------------- */
 /**
  * @swagger
@@ -433,7 +433,7 @@ router.delete('/posts/:id', verifyToken, async (req, res, next) => {
 
 // POST /posts/:id/save – save a post
 /* ------------------------------------------------------------------------- */
-/* 💾  Save / Unsave                                                         */
+/*  Save / Unsave                                                         */
 /* ------------------------------------------------------------------------- */
 /**
  * @swagger
@@ -570,10 +570,7 @@ router.put('/users/me/avatar', verifyToken, upload.single('avatar'), async (req,
 });
 
 
-//------------------------------------------------------------------
-// Global error handler (should be last in your app.js, not here)
-//------------------------------------------------------------------
-// app.use((err, req, res, next) => { ... });
+
 
 router.get('/ping', (req, res) => {
   res.send('pong');
